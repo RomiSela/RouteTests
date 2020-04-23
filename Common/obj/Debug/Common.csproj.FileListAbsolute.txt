@@ -1,0 +1,5 @@
+d:\my documents\visual studio 2015\Projects\ETL_Tests\Common\bin\Debug\Common.dll
+d:\my documents\visual studio 2015\Projects\ETL_Tests\Common\bin\Debug\Common.pdb
+d:\my documents\visual studio 2015\Projects\ETL_Tests\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
+d:\my documents\visual studio 2015\Projects\ETL_Tests\Common\obj\Debug\Common.dll
+d:\my documents\visual studio 2015\Projects\ETL_Tests\Common\obj\Debug\Common.pdb
