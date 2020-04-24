@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{106757BA-DDE8-4A67-B729-5D91BBC6C536}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAssertionsExtensions", "FluentAssertionsExtensions\FluentAssertionsExtensions.csproj", "{C0985981-1E26-4AD4-9689-E80375E0B795}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions", "FluentAssertionsExtensions\Extensions.csproj", "{C0985981-1E26-4AD4-9689-E80375E0B795}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

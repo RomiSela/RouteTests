@@ -74,6 +74,10 @@
       <Project>{106757ba-dde8-4a67-b729-5d91bbc6c536}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FluentAssertionsExtensions\Extensions.csproj">
+      <Project>{c0985981-1e26-4ad4-9689-e80375e0b795}</Project>
+      <Name>Extensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

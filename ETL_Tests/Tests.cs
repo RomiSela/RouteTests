@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Common;
 using FluentAssertions;
+using FluentAssertionsExtensions;
 
 namespace ETL_Tests
 {
@@ -15,35 +16,35 @@ namespace ETL_Tests
         [TestMethod]
         public void SendValidRecord()
         {
-            PurchaseData p = PurchaseData.RandomData();
-            RabbitMQManager.Send(p);
-            List<PurchaseDataRecieve> AllPurchasesAfter = DalAccess.PullAllPurchasesData();
-            PurchaseDataRecieve relevantPurchase = new PurchaseDataRecieve();
-            foreach(var purchase in AllPurchasesAfter)
-            {
-                if (purchase.StoreId.Equals(p.StoreId))
-                    relevantPurchase = purchase;
-            }
+            PurchaseData purchaseDataToSend = new PurchaseData();
+            purchaseDataToSend.CreateValidRecord();
+            RabbitMQManager.Send(purchaseDataToSend);
 
-            relevantPurchase.ActivityDays.Should().Be(p.StoreId[1]);
-            relevantPurchase.CreditCardNumber.Should().Be(p.CreditCardNumber);
+            PurchaseDataRecieve relevantPurchase = DalAccess.PullLastPurchasesData(purchaseDataToSend.StoreId);
 
-            if (p.NumberOfPayments == null || p.NumberOfPayments == "FULL")
-            {
-                relevantPurchase.NumberOfPayments.Should().Be("1");
-                relevantPurchase.PricePerPayment.Should().Be(p.PurchasePrice);
-            }
-            else
-            {
-                relevantPurchase.NumberOfPayments.Should().Be(p.NumberOfPayments);
-                relevantPurchase.PricePerPayment.Should().Be(p.PurchasePrice / int.Parse(p.NumberOfPayments));
-            }
+            relevantPurchase.Should().ExistsCorrectlyInDb(purchaseDataToSend);
+        }
 
-            relevantPurchase.PurchasePrice.Should().Be(p.PurchasePrice);
-            relevantPurchase.StoreId.Should().Be(p.StoreId);
-            relevantPurchase.StoreType.Should().BeEquivalentTo(p.StoreId[0]);
-            relevantPurchase.IsValid.Should().Be("True");
-            relevantPurchase.WhyInvalid.Should().BeNullOrEmpty();
+        [TestMethod]
+        public void InvalidCreditCasrNumber()
+        {
+            PurchaseData purchaseDataToSend = new PurchaseData();
+            purchaseDataToSend.CreateInvalidCredirCardRecord();
+            RabbitMQManager.Send(purchaseDataToSend);
+
+            PurchaseDataRecieve relevantPurchase = DalAccess.PullLastPurchasesData(purchaseDataToSend.StoreId);
+            relevantPurchase.Should().ExistsCorrectlyInDbWithCredirCardInvalid(purchaseDataToSend);
+        }
+
+        [TestMethod]
+        public void RecordWithDateWhenStoreClose()
+        {
+            PurchaseData purchaseDataToSend = new PurchaseData();
+            purchaseDataToSend.CreateRecordWithDateWhenClose();
+            RabbitMQManager.Send(purchaseDataToSend);
+
+            PurchaseDataRecieve relevantPurchase = DalAccess.PullLastPurchasesData(purchaseDataToSend.StoreId);
+            relevantPurchase.Should().ExistsCorrectlyInDbWithDateWhenClose(purchaseDataToSend);
         }
     }
 }

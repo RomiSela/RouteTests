@@ -32,7 +32,7 @@ namespace DAL
 
         public List<PurchaseDataRecieve> PullAllPurchasesData()
         {
-            Task.Delay(TimeSpan.FromSeconds(5)).Wait();
+            Task.Delay(TimeSpan.FromSeconds(10)).Wait();
             List<PurchaseDataRecieve> purchasesDataRecieve = new List<PurchaseDataRecieve>();
             string query = $"{ConfigManager.DbPullAllQuery}";
             MySqlCommand cmd = new MySqlCommand(query, Connection);

@@ -25,3 +25,5 @@ d:\my documents\visual studio 2015\Projects\ETL_Tests\ETL_Tests\bin\Debug\Fluent
 d:\my documents\visual studio 2015\Projects\ETL_Tests\ETL_Tests\bin\Debug\FluentAssertions.xml
 d:\my documents\visual studio 2015\Projects\ETL_Tests\ETL_Tests\bin\Debug\System.ValueTuple.xml
 d:\my documents\visual studio 2015\Projects\ETL_Tests\ETL_Tests\bin\Debug\ETL_Tests.dll.config
+D:\my documents\visual studio 2015\Projects\ETL_Tests\ETL_Tests\bin\Debug\FluentAssertionsExtensions.dll
+D:\my documents\visual studio 2015\Projects\ETL_Tests\ETL_Tests\bin\Debug\FluentAssertionsExtensions.pdb

@@ -11,8 +11,7 @@ namespace Common
         public static int GenerateA5DigitsNumber()
         {
             Random rnd = new Random();
-            int n= rnd.Next(10000, 99999);
-            return n;
+            return  rnd.Next(10000, 99999);
         }
     }
 }

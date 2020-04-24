@@ -31,10 +31,5 @@ namespace Common
             string s = $"{StoreId},{CreditCardNumber},{PurchaseDate},{PurchasePrice},{NumberOfPayments}";
             return s;
         }
-
-        public static PurchaseData RandomData()
-        {
-            return new PurchaseData($"DD{Generate.GenerateA5DigitsNumber()}", "4557446145890236", "2019-09-03", 100.0, null);
-        }
     }
 }
