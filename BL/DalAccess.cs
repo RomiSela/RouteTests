@@ -27,6 +27,10 @@ namespace BL
             return DbCommunication.PullAllPurchasesData();
         }
 
+        // TODO: what if you wanted to pull the last two purchases?
+        // you are generating random numbers. but only from 1-10,000. a 1/10,000 chance for a test to fail is still too high
+        // especially because you do not clear the DB before each test. eventually you'll get duplicates.
+        // TODO: name is not correct. you are not pulling the last row. you are searching for a storeId.
         public PurchaseDataRecieve PullLastPurchasesData(string storeId)
         {
             List<PurchaseDataRecieve> purchasesDataRecieve = PullAllPurchasesData();

@@ -27,9 +27,11 @@ namespace BL
             Channel = Connection.CreateModel();
         }
 
+        // TODO: what about sending multiple rows?
         public void Send(PurchaseData purchaseData)
         {
             byte[] messageBodyBytes = Encoding.UTF8.GetBytes(purchaseData.ToString());
+            // TODO: move to configuration
             Channel.BasicPublish("", "TEST", null, messageBodyBytes);
             Disconnect();
         }

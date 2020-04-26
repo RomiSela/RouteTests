@@ -5,10 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Common;
 
+
+// TODO: why is this here
 namespace FluentAssertionsExtensions
 {
     public static class PurchaseDataExtensions
     {
+        // TODO: you don't want to create a function for each test like this
+        // you can use the valid record and set the values to whatever you want during the test
         public static void CreateValidRecord(this PurchaseData p)
         {
             p.StoreId = $"AA{Generate.GenerateA5DigitsNumber()}";

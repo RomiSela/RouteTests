@@ -16,6 +16,8 @@ namespace ETL_Tests
         [TestMethod]
         public void SendValidRecord()
         {
+            // TODO: add "Arrange, Act, Assert"
+            // TODO: you can do - PurchaseData.createValidRecord instead
             PurchaseData purchaseDataToSend = new PurchaseData();
             purchaseDataToSend.CreateValidRecord();
             RabbitMQManager.Send(purchaseDataToSend);

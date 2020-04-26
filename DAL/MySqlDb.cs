@@ -25,11 +25,15 @@ namespace DAL
             Connection.Open();
         }
 
+        //TODO: this is only ever used once and in this class. maybe it's unneccery?
         public void CloseConnection()
         {
             Connection.Close();
         }
 
+
+        // TODO: this should not be a part of the DAL. you have a lot of logic here.
+        // TODO: split into functions. You are doing many different things in one function.
         public List<PurchaseDataRecieve> PullAllPurchasesData()
         {
             Task.Delay(TimeSpan.FromSeconds(10)).Wait();

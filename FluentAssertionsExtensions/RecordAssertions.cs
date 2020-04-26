@@ -9,6 +9,11 @@ using FluentAssertions.Primitives;
 
 namespace FluentAssertionsExtensions
 {
+
+
+    // TODO: an assertion for each test is not good. adding new tests should be easy once you have your infrastructure ready.
+    // It's not generic enough and will be very hard to change when the code changes.
+    // the assertions are too specific. don't add an assertion for each test.
     public class RecordAssertions : ObjectAssertions
     {
         private PurchaseDataRecieve _purchaseDataRecieve => Subject as PurchaseDataRecieve;
@@ -17,12 +22,17 @@ namespace FluentAssertionsExtensions
         public RecordAssertions(PurchaseDataRecieve purchase) : base(purchase)
         {  }
 
+        // TODO: fix naming. It's unreadable
+        // TODO: it's a good idea to check that every field is entered correctly, but this should be 
+        // seperated. One for values that remain the same, and a generic "assertField" assertion for everything else.
         [CustomAssertion]
         private AndConstraint<RecordAssertions> AllCorrectButValidAndWhy(PurchaseData purchaseDataToSend)
         {
             _purchaseDataRecieve.ActivityDays.Should().Be(purchaseDataToSend.StoreId[1]);
             _purchaseDataRecieve.CreditCardNumber.Should().Be(purchaseDataToSend.CreditCardNumber);
 
+            // TODO: you are building logic that mirrors the code you are testing.
+            // It is a bad idea, since you might also have bugs. Tests should be "Objective" - provide input and output
             if (purchaseDataToSend.NumberOfPayments == null || purchaseDataToSend.NumberOfPayments == "FULL")
             {
                 _purchaseDataRecieve.NumberOfPayments.Should().Be("1");
@@ -41,6 +51,7 @@ namespace FluentAssertionsExtensions
         }
 
         [CustomAssertion]
+        // TODO: weird naming. what is "correctly"?
         public AndConstraint<RecordAssertions> ExistsCorrectlyInDb(PurchaseData purchaseDataToSend)
         {
             _purchaseDataRecieve.Should().AllCorrectButValidAndWhy(purchaseDataToSend);

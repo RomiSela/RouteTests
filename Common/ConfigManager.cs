@@ -7,6 +7,8 @@ using System.Configuration;
 
 namespace Common
 {
+    // TODO: it's great to use configuration. but you should split it to multiple configs.
+    // For example - RabbitMQConfig, DBConfig, TestsConfig. It'll make your life easier.
     public class ConfigManager
     {
         public static string DbServer => ConfigurationManager.AppSettings["DB_SERVER"];
