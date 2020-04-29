@@ -31,5 +31,6 @@ namespace Common
         public static string RabbitHostName => ConfigurationManager.AppSettings["RABBIT_HOST_NAME"];
         public static string RabbitVirtualHost => ConfigurationManager.AppSettings["RABBIT_VIRTUAL_HOST"];
         public static int RabbitPort => int.Parse(ConfigurationManager.AppSettings["RABBIT_PORT"]);
+        public static string QueueName => ConfigurationManager.AppSettings["QUEUE_NAME"];
     }
 }

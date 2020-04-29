@@ -22,15 +22,20 @@ namespace BL
             DbCommunication.ConnectToDb();
         }
 
-        public List<PurchaseDataRecieve> PullAllPurchasesData()
+        public void DeleteAllRows()
         {
-            return DbCommunication.PullAllPurchasesData();
+            DbCommunication.DeleteAllRow();
         }
 
-        public PurchaseDataRecieve PullLastPurchasesData(string storeId)
+        public List<PurchaseDataOutput> PullAllPurchasesData()
         {
-            List<PurchaseDataRecieve> purchasesDataRecieve = PullAllPurchasesData();
-            PurchaseDataRecieve relevantPurchase = new PurchaseDataRecieve();
+            return DbCommunication.PullAllRows();
+        }
+
+        public PurchaseDataOutput PullPurchasesDataByStoreId(string storeId)
+        {
+            List<PurchaseDataOutput> purchasesDataRecieve = PullAllPurchasesData();
+            PurchaseDataOutput relevantPurchase = new PurchaseDataOutput();
             foreach (var purchase in purchasesDataRecieve)
             {
                 if (purchase.StoreId.Equals(storeId))

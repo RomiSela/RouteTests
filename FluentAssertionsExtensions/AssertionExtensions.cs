@@ -10,7 +10,7 @@ namespace FluentAssertionsExtensions
 {
     public static class AssertionExtensions
     {
-        public static RecordAssertions Should(this PurchaseDataRecieve instance) =>
+        public static RecordAssertions Should(this PurchaseDataOutput instance) =>
             new RecordAssertions(instance);
     }
 }

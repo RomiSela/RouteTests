@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Common
 {
-    public class Generate
+    public class GenerateFields
     {
         public static int GenerateA5DigitsNumber()
         {

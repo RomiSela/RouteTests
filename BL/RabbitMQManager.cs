@@ -27,10 +27,20 @@ namespace BL
             Channel = Connection.CreateModel();
         }
 
-        public void Send(PurchaseData purchaseData)
+        public void SendOnePurchaseDate(PurchaseData purchaseData)
         {
             byte[] messageBodyBytes = Encoding.UTF8.GetBytes(purchaseData.ToString());
-            Channel.BasicPublish("", "TEST", null, messageBodyBytes);
+            Channel.BasicPublish("", ConfigManager.QueueName, null, messageBodyBytes);
+            Disconnect();
+        }
+
+        public void SendAListOfPurchaseDate(List<PurchaseData> purchaseDatas)
+        {
+            foreach(PurchaseData purchaseData in purchaseDatas)
+            {
+                byte[] messageBodyBytes = Encoding.UTF8.GetBytes(purchaseData.ToString());
+                Channel.BasicPublish("", ConfigManager.QueueName, null, messageBodyBytes);
+            }
             Disconnect();
         }
 

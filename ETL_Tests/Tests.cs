@@ -1,9 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Common;
 using FluentAssertions;
 using FluentAssertionsExtensions;
@@ -16,35 +11,46 @@ namespace ETL_Tests
         [TestMethod]
         public void SendValidRecord()
         {
+            //Arenge
             PurchaseData purchaseDataToSend = new PurchaseData();
             purchaseDataToSend.CreateValidRecord();
-            RabbitMQManager.Send(purchaseDataToSend);
 
-            PurchaseDataRecieve relevantPurchase = DalAccess.PullLastPurchasesData(purchaseDataToSend.StoreId);
+            //Act
+            RabbitMQManager.SendOnePurchaseDate(purchaseDataToSend);
 
-            relevantPurchase.Should().ExistsCorrectlyInDb(purchaseDataToSend);
+            //Assert
+            PurchaseDataOutput relevantPurchase = DalAccess.PullPurchasesDataByStoreId(purchaseDataToSend.StoreId);
+            relevantPurchase.Should().BeAddedCorrectlyToDb(purchaseDataToSend, ValidationOptions.Correct);
         }
 
         [TestMethod]
         public void InvalidCreditCasrNumber()
         {
+            //Arenge
             PurchaseData purchaseDataToSend = new PurchaseData();
             purchaseDataToSend.CreateInvalidCredirCardRecord();
-            RabbitMQManager.Send(purchaseDataToSend);
 
-            PurchaseDataRecieve relevantPurchase = DalAccess.PullLastPurchasesData(purchaseDataToSend.StoreId);
-            relevantPurchase.Should().ExistsCorrectlyInDbWithCredirCardInvalid(purchaseDataToSend);
+            //Act
+            RabbitMQManager.SendOnePurchaseDate(purchaseDataToSend);
+
+            //Assert
+            PurchaseDataOutput relevantPurchase = DalAccess.PullPurchasesDataByStoreId(purchaseDataToSend.StoreId);
+            relevantPurchase.Should().BeAddedCorrectlyToDb(purchaseDataToSend, ValidationOptions.InvalidCreditCard);
         }
 
         [TestMethod]
         public void RecordWithDateWhenStoreClose()
         {
+            //Arenge
             PurchaseData purchaseDataToSend = new PurchaseData();
             purchaseDataToSend.CreateRecordWithDateWhenClose();
-            RabbitMQManager.Send(purchaseDataToSend);
 
-            PurchaseDataRecieve relevantPurchase = DalAccess.PullLastPurchasesData(purchaseDataToSend.StoreId);
-            relevantPurchase.Should().ExistsCorrectlyInDbWithDateWhenClose(purchaseDataToSend);
+            //Act
+            RabbitMQManager.SendOnePurchaseDate(purchaseDataToSend);
+
+            //Assert
+            PurchaseDataOutput relevantPurchase = DalAccess.PullPurchasesDataByStoreId(purchaseDataToSend.StoreId);
+            relevantPurchase.Should().BeAddedCorrectlyToDb(purchaseDataToSend, ValidationOptions.PurchaseDateWhenStoreClose);
         }
     }
 }
