@@ -34,6 +34,13 @@ namespace BL
             Disconnect();
         }
 
+        public void SendString(string purchaseData)
+        {
+            byte[] messageBodyBytes = Encoding.UTF8.GetBytes(purchaseData);
+            Channel.BasicPublish("", ConfigManager.QueueName, null, messageBodyBytes);
+            Disconnect();
+        }
+
         public void SendAListOfPurchaseDate(List<PurchaseData> purchaseDatas)
         {
             foreach(PurchaseData purchaseData in purchaseDatas)

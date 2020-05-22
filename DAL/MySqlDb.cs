@@ -49,7 +49,7 @@ namespace DAL
                 purchaseDataOutput.CreditCardNumber = reader[ConfigManager.CreditCardDb].ToString();
                 purchaseDataOutput.PurchaseDate = reader[ConfigManager.PurchaseDateDb].ToString();
                 purchaseDataOutput.InsertionDate = DateTime.Parse(reader[ConfigManager.AddedToDb].ToString());
-                purchaseDataOutput.PurchasePrice = double.Parse(reader[ConfigManager.PurchasePriceDb].ToString());
+                purchaseDataOutput.PurchasePrice = reader[ConfigManager.PurchasePriceDb].ToString();
                 purchaseDataOutput.NumberOfPayments = reader[ConfigManager.NumberOfPaymentsDb].ToString();
                 purchaseDataOutput.PricePerPayment = double.Parse(reader[ConfigManager.PricePerPaymentDb].ToString());
                 purchaseDataOutput.IsValid = reader[ConfigManager.IsValidDb].ToString();

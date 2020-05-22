@@ -26,12 +26,12 @@ namespace FluentAssertionsExtensions
             if (purchaseDataToSend.NumberOfPayments == null || purchaseDataToSend.NumberOfPayments == "FULL")
             {
                 _purchaseDataRecieve.NumberOfPayments.Should().Be("1");
-                _purchaseDataRecieve.PricePerPayment.Should().Be(purchaseDataToSend.PurchasePrice);
+                _purchaseDataRecieve.PricePerPayment.Should().Be(double.Parse(purchaseDataToSend.PurchasePrice));
             }
             else
             {
                 _purchaseDataRecieve.NumberOfPayments.Should().Be(purchaseDataToSend.NumberOfPayments);
-                _purchaseDataRecieve.PricePerPayment.Should().Be(purchaseDataToSend.PurchasePrice / int.Parse(purchaseDataToSend.NumberOfPayments));
+                _purchaseDataRecieve.PricePerPayment.Should().Be(double.Parse(purchaseDataToSend.PurchasePrice) / int.Parse(purchaseDataToSend.NumberOfPayments));
             }
 
             _purchaseDataRecieve.PurchasePrice.Should().Be(purchaseDataToSend.PurchasePrice);
@@ -63,7 +63,7 @@ namespace FluentAssertionsExtensions
                 }
                 else
                 {
-                    _purchaseDataRecieve.WhyInvalid.Should().Be("Purchase was made after insertion day");
+                    _purchaseDataRecieve.WhyInvalid.Should().Be("The purchase date cant be in the future");
                 }
             }
             return new AndConstraint<RecordAssertions>(this);
