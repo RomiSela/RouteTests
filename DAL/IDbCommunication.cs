@@ -10,6 +10,7 @@ namespace DAL
     public interface IDbCommunication
     {
         void ConnectToDb();
-        List<PurchaseDataRecieve> PullAllPurchasesData();
+        void DeleteAllRow();
+        List<PurchaseDataOutput> PullAllRows();
     }
 }

@@ -22,7 +22,7 @@ namespace ETL_Tests
         [TestCleanup]
         public void TestCleanup()
         {
-
+            DalAccess.DeleteAllRows();
         }
     }
 }

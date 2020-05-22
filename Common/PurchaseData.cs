@@ -11,13 +11,13 @@ namespace Common
         public string StoreId { get; set; }
         public string CreditCardNumber { get; set; }
         public string PurchaseDate { get; set; }
-        public double PurchasePrice { get; set; }
+        public string PurchasePrice { get; set; }
         public string NumberOfPayments { get; set; }
 
         public PurchaseData()
         { }
 
-        public PurchaseData(string storeId, string creditCardNumber, string purchaseDate, double purchasePrice, string numberOfPayments)
+        public PurchaseData(string storeId, string creditCardNumber, string purchaseDate, string purchasePrice, string numberOfPayments)
         {
             StoreId = storeId;
             CreditCardNumber = creditCardNumber;
@@ -28,8 +28,12 @@ namespace Common
 
         public override string ToString()
         {
-            string s = $"{StoreId},{CreditCardNumber},{PurchaseDate},{PurchasePrice},{NumberOfPayments}";
-            return s;
+            if (NumberOfPayments != null)
+            {
+                return $"{StoreId},{CreditCardNumber},{PurchaseDate},{PurchasePrice},{NumberOfPayments}";
+            }
+            return $"{StoreId},{CreditCardNumber},{PurchaseDate},{PurchasePrice}";
         }
+
     }
 }

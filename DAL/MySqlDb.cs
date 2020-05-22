@@ -16,50 +16,57 @@ namespace DAL
         public void ConnectToDb()
         {
             string connectionString = $"SERVER={ConfigManager.DbServer};DATABASE={ConfigManager.DbName};UID={ConfigManager.DbUid};PASSWORD={ConfigManager.DbPassword};";
-
             Connection = new MySqlConnection(connectionString);
         }
 
-        public void OpenConnection()
+        public void DeleteAllRow()
         {
+            var query = "DELETE FROM purchases";
+            var cmd = new MySqlCommand(query, Connection);
             Connection.Open();
-        }
-
-        public void CloseConnection()
-        {
+            cmd.ExecuteNonQuery();
             Connection.Close();
         }
 
-        public List<PurchaseDataRecieve> PullAllPurchasesData()
+        public MySqlCommand CreateQueryForReadAllRows()
         {
-            Task.Delay(TimeSpan.FromSeconds(10)).Wait();
-            List<PurchaseDataRecieve> purchasesDataRecieve = new List<PurchaseDataRecieve>();
             string query = $"{ConfigManager.DbPullAllQuery}";
-            MySqlCommand cmd = new MySqlCommand(query, Connection);
-            OpenConnection();
+            return new MySqlCommand(query, Connection);
+        }
 
+        public List<PurchaseDataOutput> ReadAllRows(MySqlCommand cmd)
+        {
+            List<PurchaseDataOutput> purchasesDatasOutput = new List<PurchaseDataOutput>();
+            Task.Delay(TimeSpan.FromSeconds(10)).Wait();
             MySqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    PurchaseDataRecieve purchaseDataRecieve = new PurchaseDataRecieve();
-                    purchaseDataRecieve.PurchaseId = reader[ConfigManager.PurchaseIdDb].ToString();
-                    purchaseDataRecieve.StoreType = char.Parse(reader[ConfigManager.StoreTypeDb].ToString());
-                    purchaseDataRecieve.StoreId = reader[ConfigManager.StoreIdDb].ToString();
-                    purchaseDataRecieve.ActivityDays = char.Parse(reader[ConfigManager.ActivityDaysDb].ToString());
-                    purchaseDataRecieve.CreditCardNumber = reader[ConfigManager.CreditCardDb].ToString();
-                    purchaseDataRecieve.PurchaseDate = reader[ConfigManager.PurchaseDateDb].ToString();
-                    purchaseDataRecieve.DbAddDate = DateTime.Parse(reader[ConfigManager.AddedToDb].ToString());
-                    purchaseDataRecieve.PurchasePrice = double.Parse(reader[ConfigManager.PurchasePriceDb].ToString());
-                    purchaseDataRecieve.NumberOfPayments = reader[ConfigManager.NumberOfPaymentsDb].ToString();
-                    purchaseDataRecieve.PricePerPayment = double.Parse(reader[ConfigManager.PricePerPaymentDb].ToString());
-                    purchaseDataRecieve.IsValid = reader[ConfigManager.IsValidDb].ToString();
-                    purchaseDataRecieve.WhyInvalid = reader[ConfigManager.WhyInvalidDb].ToString();
-                    purchasesDataRecieve.Add(purchaseDataRecieve);
-                }
-
+            while (reader.Read())
+            {
+                PurchaseDataOutput purchaseDataOutput = new PurchaseDataOutput();
+                purchaseDataOutput.PurchaseId = reader[ConfigManager.PurchaseIdDb].ToString();
+                purchaseDataOutput.StoreType = char.Parse(reader[ConfigManager.StoreTypeDb].ToString());
+                purchaseDataOutput.StoreId = reader[ConfigManager.StoreIdDb].ToString();
+                purchaseDataOutput.ActivityDays = char.Parse(reader[ConfigManager.ActivityDaysDb].ToString());
+                purchaseDataOutput.CreditCardNumber = reader[ConfigManager.CreditCardDb].ToString();
+                purchaseDataOutput.PurchaseDate = reader[ConfigManager.PurchaseDateDb].ToString();
+                purchaseDataOutput.InsertionDate = DateTime.Parse(reader[ConfigManager.AddedToDb].ToString());
+                purchaseDataOutput.PurchasePrice = reader[ConfigManager.PurchasePriceDb].ToString();
+                purchaseDataOutput.NumberOfPayments = reader[ConfigManager.NumberOfPaymentsDb].ToString();
+                purchaseDataOutput.PricePerPayment = double.Parse(reader[ConfigManager.PricePerPaymentDb].ToString());
+                purchaseDataOutput.IsValid = reader[ConfigManager.IsValidDb].ToString();
+                purchaseDataOutput.WhyInvalid = reader[ConfigManager.WhyInvalidDb].ToString();
+                purchasesDatasOutput.Add(purchaseDataOutput);
+            }
             reader.Close();
-            CloseConnection();
-            return purchasesDataRecieve;
+            return purchasesDatasOutput;
+        }
+
+        public List<PurchaseDataOutput> PullAllRows()
+        {
+            var cmd = CreateQueryForReadAllRows();
+            Connection.Open();
+            var purchaseDatasOutput = ReadAllRows(cmd);
+            Connection.Close();
+            return purchaseDatasOutput;
         }
     }
 }

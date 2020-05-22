@@ -11,14 +11,14 @@ namespace FluentAssertionsExtensions
 {
     public class RecordAssertions : ObjectAssertions
     {
-        private PurchaseDataRecieve _purchaseDataRecieve => Subject as PurchaseDataRecieve;
+        private PurchaseDataOutput _purchaseDataRecieve => Subject as PurchaseDataOutput;
         protected override string Identifier => " ";
 
-        public RecordAssertions(PurchaseDataRecieve purchase) : base(purchase)
+        public RecordAssertions(PurchaseDataOutput purchase) : base(purchase)
         {  }
 
         [CustomAssertion]
-        private AndConstraint<RecordAssertions> AllCorrectButValidAndWhy(PurchaseData purchaseDataToSend)
+        public AndConstraint<RecordAssertions> BeAddedCorrectlyToDb(PurchaseData purchaseDataToSend, ValidationOptions validationOption)
         {
             _purchaseDataRecieve.ActivityDays.Should().Be(purchaseDataToSend.StoreId[1]);
             _purchaseDataRecieve.CreditCardNumber.Should().Be(purchaseDataToSend.CreditCardNumber);
@@ -26,44 +26,46 @@ namespace FluentAssertionsExtensions
             if (purchaseDataToSend.NumberOfPayments == null || purchaseDataToSend.NumberOfPayments == "FULL")
             {
                 _purchaseDataRecieve.NumberOfPayments.Should().Be("1");
-                _purchaseDataRecieve.PricePerPayment.Should().Be(purchaseDataToSend.PurchasePrice);
+                _purchaseDataRecieve.PricePerPayment.Should().Be(double.Parse(purchaseDataToSend.PurchasePrice));
             }
             else
             {
                 _purchaseDataRecieve.NumberOfPayments.Should().Be(purchaseDataToSend.NumberOfPayments);
-                _purchaseDataRecieve.PricePerPayment.Should().Be(purchaseDataToSend.PurchasePrice / int.Parse(purchaseDataToSend.NumberOfPayments));
+                _purchaseDataRecieve.PricePerPayment.Should().Be(double.Parse(purchaseDataToSend.PurchasePrice) / int.Parse(purchaseDataToSend.NumberOfPayments));
             }
 
             _purchaseDataRecieve.PurchasePrice.Should().Be(purchaseDataToSend.PurchasePrice);
             _purchaseDataRecieve.StoreId.Should().Be(purchaseDataToSend.StoreId);
             _purchaseDataRecieve.StoreType.Should().BeEquivalentTo(purchaseDataToSend.StoreId[0]);
-            return new AndConstraint<RecordAssertions>(this);
-        }
-
-        [CustomAssertion]
-        public AndConstraint<RecordAssertions> ExistsCorrectlyInDb(PurchaseData purchaseDataToSend)
-        {
-            _purchaseDataRecieve.Should().AllCorrectButValidAndWhy(purchaseDataToSend);
-            _purchaseDataRecieve.IsValid.Should().Be("True");
-            _purchaseDataRecieve.WhyInvalid.Should().BeNullOrEmpty();
-            return new AndConstraint<RecordAssertions>(this);
-        }
-
-        [CustomAssertion]
-        public AndConstraint<RecordAssertions> ExistsCorrectlyInDbWithCredirCardInvalid(PurchaseData purchaseDataToSend)
-        {
-            _purchaseDataRecieve.Should().AllCorrectButValidAndWhy(purchaseDataToSend);
-            _purchaseDataRecieve.IsValid.Should().Be("False");
-            _purchaseDataRecieve.WhyInvalid.Should().Be("The credit card number is not valid");
-            return new AndConstraint<RecordAssertions>(this);
-        }
-
-        [CustomAssertion]
-        public AndConstraint<RecordAssertions> ExistsCorrectlyInDbWithDateWhenClose(PurchaseData purchaseDataToSend)
-        {
-            _purchaseDataRecieve.Should().AllCorrectButValidAndWhy(purchaseDataToSend);
-            _purchaseDataRecieve.IsValid.Should().Be("False");
-            _purchaseDataRecieve.WhyInvalid.Should().Be("Purchase was made on a day that the store is closed");
+            if(validationOption.Equals( ValidationOptions.Correct))
+            {
+                _purchaseDataRecieve.IsValid.Should().Be("1");
+                _purchaseDataRecieve.WhyInvalid.Should().BeNullOrEmpty();
+            }
+            else 
+            {
+                _purchaseDataRecieve.IsValid.Should().Be("0");
+                if (validationOption.Equals(ValidationOptions.InvalidCreditCard))
+                {
+                    _purchaseDataRecieve.WhyInvalid.Should().Be("The credit card number is not valid");
+                }
+                else if(validationOption.Equals(ValidationOptions.InvalidNumberOfPayments))
+                {
+                    _purchaseDataRecieve.WhyInvalid.Should().Be("Number of installments cant be higher than price*10");
+                }
+                else if(validationOption.Equals(ValidationOptions.InvalidPricePerPayment))
+                {
+                    _purchaseDataRecieve.WhyInvalid.Should().Be("Price per installment cant be higher than 5000");
+                }
+                else if(validationOption.Equals(ValidationOptions.PurchaseDateWhenStoreClose))
+                {
+                    _purchaseDataRecieve.WhyInvalid.Should().Be("Purchase was made on a day that the store is closed");
+                }
+                else
+                {
+                    _purchaseDataRecieve.WhyInvalid.Should().Be("The purchase date cant be in the future");
+                }
+            }
             return new AndConstraint<RecordAssertions>(this);
         }
     }
