@@ -16,7 +16,7 @@ namespace ETL_Tests
             purchaseDataToSend.CreateInvalidCredirCardRecord();
 
             //Act
-            RabbitMQManager.SendOnePurchaseDate(purchaseDataToSend);
+            RabbitMQManager.SendString(purchaseDataToSend.ToString());
 
             //Assert
             PurchaseDataOutput relevantPurchase = DalAccess.PullPurchasesDataByStoreId(purchaseDataToSend.StoreId);
@@ -31,7 +31,7 @@ namespace ETL_Tests
             purchaseDataToSend.CreateRecordWithInvalidNumberOfPayments();
 
             //Act
-            RabbitMQManager.SendOnePurchaseDate(purchaseDataToSend);
+            RabbitMQManager.SendString(purchaseDataToSend.ToString());
 
             //Assert
             PurchaseDataOutput relevantPurchase = DalAccess.PullPurchasesDataByStoreId(purchaseDataToSend.StoreId);
@@ -46,7 +46,7 @@ namespace ETL_Tests
             purchaseDataToSend.CreateRecordWithDateWhenClose();
 
             //Act
-            RabbitMQManager.SendOnePurchaseDate(purchaseDataToSend);
+            RabbitMQManager.SendString(purchaseDataToSend.ToString());
 
             //Assert
             PurchaseDataOutput relevantPurchase = DalAccess.PullPurchasesDataByStoreId(purchaseDataToSend.StoreId);
@@ -60,7 +60,21 @@ namespace ETL_Tests
             purchaseDataToSend.CreateRecordWithDateLaterThanNow();
 
             //Act
-            RabbitMQManager.SendOnePurchaseDate(purchaseDataToSend);
+            RabbitMQManager.SendString(purchaseDataToSend.ToString());
+
+            //Assert
+            PurchaseDataOutput relevantPurchase = DalAccess.PullPurchasesDataByStoreId(purchaseDataToSend.StoreId);
+            relevantPurchase.Should().BeAddedCorrectlyToDb(purchaseDataToSend, ValidationOptions.PurchaseDateAfterInsertionDate);
+        }
+        //here
+        public void RecordWithInvalidPricePerPayments()
+        {
+            //Arenge
+            PurchaseData purchaseDataToSend = new PurchaseData();
+            purchaseDataToSend.CreateRecordWithDateLaterThanNow();
+
+            //Act
+            RabbitMQManager.SendString(purchaseDataToSend.ToString());
 
             //Assert
             PurchaseDataOutput relevantPurchase = DalAccess.PullPurchasesDataByStoreId(purchaseDataToSend.StoreId);

@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BL;
+using Common;
+using FluentAssertionsExtensions;
 
 namespace ETL_Tests
 {
@@ -17,6 +19,16 @@ namespace ETL_Tests
             RabbitMQManager.Connect();
             DalAccess = new DalAccess();
             DalAccess.ConnectToDb();
+        }
+
+        [TestMethod]
+        protected string ArrangeOneValidAndOneInString(string record)
+        {
+            PurchaseData validPurchaseData = new PurchaseData();
+            validPurchaseData.CreateValidRecord();
+            string twoRecords = $"{validPurchaseData.ToString()}/l{record}";
+            twoRecords = twoRecords.Replace("/l", Environment.NewLine);
+            return twoRecords;
         }
 
         [TestCleanup]

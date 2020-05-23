@@ -34,7 +34,7 @@ namespace FluentAssertionsExtensions
                 _purchaseDataRecieve.PricePerPayment.Should().Be(double.Parse(purchaseDataToSend.PurchasePrice) / int.Parse(purchaseDataToSend.NumberOfPayments));
             }
 
-            _purchaseDataRecieve.PurchasePrice.Should().Be(purchaseDataToSend.PurchasePrice);
+            double.Parse(_purchaseDataRecieve.PurchasePrice).Should().Be(double.Parse(purchaseDataToSend.PurchasePrice));
             _purchaseDataRecieve.StoreId.Should().Be(purchaseDataToSend.StoreId);
             _purchaseDataRecieve.StoreType.Should().BeEquivalentTo(purchaseDataToSend.StoreId[0]);
             if(validationOption.Equals( ValidationOptions.Correct))

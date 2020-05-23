@@ -10,14 +10,39 @@ namespace ETL_Tests
     [TestClass]
     public class ImpossibleRecordsTests : TestBase
     {
+
+        [TestMethod]
+        private string ArrangeRecordWithImpossibleDate(string testCase)
+        {
+            PurchaseData recordWithInvalidDate = new PurchaseData();
+            recordWithInvalidDate.CreateRecordWithDateNotInFormat(testCase);
+            string twoRecords = ArrangeOneValidAndOneInString(recordWithInvalidDate.ToString());
+            return twoRecords;
+        }
+
+        [TestMethod]
+        private string ArrangeTestRecordWithImpossibleStoreId(int testCase)
+        {
+            PurchaseData recordWithInvalidStoreId = new PurchaseData();
+            recordWithInvalidStoreId.CreateRecordWithInvalidStoreId(testCase);
+            string twoRecords = ArrangeOneValidAndOneInString(recordWithInvalidStoreId.ToString());
+            return twoRecords;
+        }
+
+        [TestMethod]
+        private string ArrangeTestRecordWithImpossibleNumberOfPayments(int testCase)
+        {
+            PurchaseData recordWithInvalidStoreId = new PurchaseData();
+            recordWithInvalidStoreId.CreateRecordWithImpossibleNumberOfPayments(testCase);
+            string twoRecords = ArrangeOneValidAndOneInString(recordWithInvalidStoreId.ToString());
+            return twoRecords;
+        }
+
         [TestMethod]
         public void RecordWithoutMustHaveFieldStoreId()
         {
             //Arenge
-            PurchaseData validPurchaseData = new PurchaseData();
-            validPurchaseData.CreateValidRecord();
-            string twoRecords = $"{validPurchaseData.ToString()}/l4557446145890236,2019-09-03,100.0";
-            twoRecords = twoRecords.Replace("/l", Environment.NewLine);
+            string twoRecords = ArrangeOneValidAndOneInString("4557446145890236,2019-09-03,100.0");
 
             //Act
             RabbitMQManager.SendString(twoRecords);
@@ -31,10 +56,7 @@ namespace ETL_Tests
         public void RecordWithoutMustHaveFieldCreditCard()
         {
             //Arenge
-            PurchaseData validPurchaseData = new PurchaseData();
-            validPurchaseData.CreateValidRecord();
-            string twoRecords = $"{validPurchaseData.ToString()}/lAA12345,2019-09-03,100.0";
-            twoRecords = twoRecords.Replace("/l", Environment.NewLine);
+            string twoRecords = ArrangeOneValidAndOneInString("AA12345,2019-09-03,100.0");
 
             //Act
             RabbitMQManager.SendString(twoRecords);
@@ -48,10 +70,7 @@ namespace ETL_Tests
         public void RecordWithoutMustHaveFieldDate()
         {
             //Arenge
-            PurchaseData validPurchaseData = new PurchaseData();
-            validPurchaseData.CreateValidRecord();
-            string twoRecords = $"{validPurchaseData.ToString()}/lAA12345,4557446145890236,100.0";
-            twoRecords = twoRecords.Replace("/l", Environment.NewLine);
+            string twoRecords = ArrangeOneValidAndOneInString("AA12345,4557446145890236,100.0");
 
             //Act
             RabbitMQManager.SendString(twoRecords);
@@ -65,10 +84,7 @@ namespace ETL_Tests
         public void RecordWithoutMustHaveFieldPrice()
         {
             //Arenge
-            PurchaseData validPurchaseData = new PurchaseData();
-            validPurchaseData.CreateValidRecord();
-            string twoRecords = $"{validPurchaseData.ToString()}/lAA12345,4557446145890236,2019-09-03";
-            twoRecords = twoRecords.Replace("/l", Environment.NewLine);
+            string twoRecords = ArrangeOneValidAndOneInString("AA12345,4557446145890236,2019-09-03");
 
             //Act
             RabbitMQManager.SendString(twoRecords);
@@ -82,10 +98,7 @@ namespace ETL_Tests
         public void RecordWithTimeNotInTheRightFormat()
         {
             //Arenge
-            PurchaseData validPurchaseData = new PurchaseData();
-            validPurchaseData.CreateValidRecord();
-            string twoRecords = $"{validPurchaseData.ToString()}/lAA12345,4557446145890236,2019-09-32,100.0";
-            twoRecords = twoRecords.Replace("/l", Environment.NewLine);
+            string twoRecords = ArrangeOneValidAndOneInString("AA12345,4557446145890236,2019-09-32,100.0");
 
             //Act
             RabbitMQManager.SendString(twoRecords);
@@ -99,12 +112,7 @@ namespace ETL_Tests
         public void RecordWithDateNotInFormatOne()
         {
             //Arenge
-            PurchaseData validPurchaseData = new PurchaseData();
-            validPurchaseData.CreateValidRecord();
-            PurchaseData recordWithDateNotInFormat = new PurchaseData();
-            recordWithDateNotInFormat.CreateRecordWithDateNotInFormat("notExist");
-            string twoRecords = $"{validPurchaseData.ToString()}/l{recordWithDateNotInFormat.ToString()}";
-            twoRecords = twoRecords.Replace("/l", Environment.NewLine);
+            string twoRecords = ArrangeRecordWithImpossibleDate("notExist");
 
             //Act
             RabbitMQManager.SendString(twoRecords);
@@ -118,12 +126,7 @@ namespace ETL_Tests
         public void RecordWithDateNotInFormatTwo()
         {
             //Arenge
-            PurchaseData validPurchaseData = new PurchaseData();
-            validPurchaseData.CreateValidRecord();
-            PurchaseData recordWithDateNotInFormat = new PurchaseData();
-            recordWithDateNotInFormat.CreateRecordWithDateNotInFormat("randomNumber");
-            string twoRecords = $"{validPurchaseData.ToString()}/l{recordWithDateNotInFormat.ToString()}";
-            twoRecords = twoRecords.Replace("/l", Environment.NewLine);
+            string twoRecords = ArrangeRecordWithImpossibleDate("randomNumber");
 
             //Act
             RabbitMQManager.SendString(twoRecords);
@@ -137,12 +140,7 @@ namespace ETL_Tests
         public void RecordWithDateNotInFormatThree()
         {
             //Arenge
-            PurchaseData validPurchaseData = new PurchaseData();
-            validPurchaseData.CreateValidRecord();
-            PurchaseData recordWithDateNotInFormat = new PurchaseData();
-            recordWithDateNotInFormat.CreateRecordWithDateNotInFormat("notInOrder");
-            string twoRecords = $"{validPurchaseData.ToString()}/l{recordWithDateNotInFormat.ToString()}";
-            twoRecords = twoRecords.Replace("/l", Environment.NewLine);
+            string twoRecords = ArrangeRecordWithImpossibleDate("notInOrder");
 
             //Act
             RabbitMQManager.SendString(twoRecords);
@@ -156,12 +154,7 @@ namespace ETL_Tests
         public void RecordWithFirstLetterDoesntExist()
         {
             //Arenge
-            PurchaseData validPurchaseData = new PurchaseData();
-            validPurchaseData.CreateValidRecord();
-            PurchaseData recordWithDateNotInFormat = new PurchaseData();
-            recordWithDateNotInFormat.CreateRecordWithInvalidStoreId(1);
-            string twoRecords = $"{validPurchaseData.ToString()}/l{recordWithDateNotInFormat.ToString()}";
-            twoRecords = twoRecords.Replace("/l", Environment.NewLine);
+            string twoRecords = ArrangeTestRecordWithImpossibleStoreId(1);
 
             //Act
             RabbitMQManager.SendString(twoRecords);
@@ -175,12 +168,7 @@ namespace ETL_Tests
         public void RecordWithSecondLetterDoesntExist()
         {
             //Arenge
-            PurchaseData validPurchaseData = new PurchaseData();
-            validPurchaseData.CreateValidRecord();
-            PurchaseData recordWithDateNotInFormat = new PurchaseData();
-            recordWithDateNotInFormat.CreateRecordWithInvalidStoreId(2);
-            string twoRecords = $"{validPurchaseData.ToString()}/l{recordWithDateNotInFormat.ToString()}";
-            twoRecords = twoRecords.Replace("/l", Environment.NewLine);
+            string twoRecords = ArrangeTestRecordWithImpossibleStoreId(2);
 
             //Act
             RabbitMQManager.SendString(twoRecords);
@@ -189,17 +177,12 @@ namespace ETL_Tests
             List<PurchaseDataOutput> outputPurchases = DalAccess.PullAllPurchasesData();
             outputPurchases.Count.Should().Be(1);
         }
-
+        
         [TestMethod]
         public void RecordWithFirstLetterSmall()
         {
             //Arenge
-            PurchaseData validPurchaseData = new PurchaseData();
-            validPurchaseData.CreateValidRecord();
-            PurchaseData recordWithDateNotInFormat = new PurchaseData();
-            recordWithDateNotInFormat.CreateRecordWithInvalidStoreId(3);
-            string twoRecords = $"{validPurchaseData.ToString()}/l{recordWithDateNotInFormat.ToString()}";
-            twoRecords = twoRecords.Replace("/l", Environment.NewLine);
+            string twoRecords = ArrangeTestRecordWithImpossibleStoreId(3);
 
             //Act
             RabbitMQManager.SendString(twoRecords);
@@ -213,12 +196,7 @@ namespace ETL_Tests
         public void RecordWithSecondLetterSmall()
         {
             //Arenge
-            PurchaseData validPurchaseData = new PurchaseData();
-            validPurchaseData.CreateValidRecord();
-            PurchaseData recordWithDateNotInFormat = new PurchaseData();
-            recordWithDateNotInFormat.CreateRecordWithInvalidStoreId(4);
-            string twoRecords = $"{validPurchaseData.ToString()}/l{recordWithDateNotInFormat.ToString()}";
-            twoRecords = twoRecords.Replace("/l", Environment.NewLine);
+            string twoRecords = ArrangeTestRecordWithImpossibleStoreId(4);
 
             //Act
             RabbitMQManager.SendString(twoRecords);
@@ -232,12 +210,7 @@ namespace ETL_Tests
         public void RecordWithFirstCharNotLetter()
         {
             //Arenge
-            PurchaseData validPurchaseData = new PurchaseData();
-            validPurchaseData.CreateValidRecord();
-            PurchaseData recordWithDateNotInFormat = new PurchaseData();
-            recordWithDateNotInFormat.CreateRecordWithInvalidStoreId(5);
-            string twoRecords = $"{validPurchaseData.ToString()}/l{recordWithDateNotInFormat.ToString()}";
-            twoRecords = twoRecords.Replace("/l", Environment.NewLine);
+            string twoRecords = ArrangeTestRecordWithImpossibleStoreId(5);
 
             //Act
             RabbitMQManager.SendString(twoRecords);
@@ -251,12 +224,7 @@ namespace ETL_Tests
         public void RecordWithSecondCharNotLetter()
         {
             //Arenge
-            PurchaseData validPurchaseData = new PurchaseData();
-            validPurchaseData.CreateValidRecord();
-            PurchaseData recordWithDateNotInFormat = new PurchaseData();
-            recordWithDateNotInFormat.CreateRecordWithInvalidStoreId(6);
-            string twoRecords = $"{validPurchaseData.ToString()}/l{recordWithDateNotInFormat.ToString()}";
-            twoRecords = twoRecords.Replace("/l", Environment.NewLine);
+            string twoRecords = ArrangeTestRecordWithImpossibleStoreId(6);
 
             //Act
             RabbitMQManager.SendString(twoRecords);
@@ -270,12 +238,7 @@ namespace ETL_Tests
         public void RecordWithNotANumberInPrice()
         {
             //Arenge
-            PurchaseData validPurchaseData = new PurchaseData();
-            validPurchaseData.CreateValidRecord();
-            PurchaseData recordWithDateNotInFormat = new PurchaseData();
-            recordWithDateNotInFormat.CreateRecordWithInvalidNumberOfPayment();
-            string twoRecords = $"{validPurchaseData.ToString()}/l{recordWithDateNotInFormat.ToString()}";
-            twoRecords = twoRecords.Replace("/l", Environment.NewLine);
+            string twoRecords = ArrangeOneValidAndOneInString("AA12345,4557446145890236,2019-09-03,one");
 
             //Act
             RabbitMQManager.SendString(twoRecords);
@@ -284,5 +247,76 @@ namespace ETL_Tests
             List<PurchaseDataOutput> outputPurchases = DalAccess.PullAllPurchasesData();
             outputPurchases.Count.Should().Be(1);
         }
+
+        [TestMethod]
+        public void RecordWith8CharsInStoreId()
+        {
+            //Arenge
+            string twoRecords = ArrangeOneValidAndOneInString("AA123454,4557446145890236,2019-09-03,100.0");
+
+            //Act
+            RabbitMQManager.SendString(twoRecords);
+
+            //Assert
+            List<PurchaseDataOutput> outputPurchases = DalAccess.PullAllPurchasesData();
+            outputPurchases.Count.Should().Be(1);
+        }
+
+        [TestMethod]
+        public void RecordWithout5DigitsInStoreId()
+        {
+            //Arenge
+            string twoRecords = ArrangeOneValidAndOneInString("AA1234@,4557446145890236,2019-09-03,100.0");
+
+            //Act
+            RabbitMQManager.SendString(twoRecords);
+
+            //Assert
+            List<PurchaseDataOutput> outputPurchases = DalAccess.PullAllPurchasesData();
+            outputPurchases.Count.Should().Be(1);
+        }
+
+        [TestMethod]
+        public void RecordWithImpossibleNumberOfPaymentsfull()
+        {
+            //Arenge
+            string twoRecords = ArrangeTestRecordWithImpossibleNumberOfPayments(1);
+
+            //Act
+            RabbitMQManager.SendString(twoRecords);
+
+            //Assert
+            List<PurchaseDataOutput> outputPurchases = DalAccess.PullAllPurchasesData();
+            outputPurchases.Count.Should().Be(1);
+        }
+
+        [TestMethod]
+        public void RecordWithImpossibleNumberOfPaymentsANegativeNumber()
+        {
+            //Arenge
+            string twoRecords = ArrangeTestRecordWithImpossibleNumberOfPayments(2);
+
+            //Act
+            RabbitMQManager.SendString(twoRecords);
+
+            //Assert
+            List<PurchaseDataOutput> outputPurchases = DalAccess.PullAllPurchasesData();
+            outputPurchases.Count.Should().Be(1);
+        }
+
+        [TestMethod]
+        public void RecordWithImpossibleNumberOfPaymentsRandomChar()
+        {
+            //Arenge
+            string twoRecords = ArrangeTestRecordWithImpossibleNumberOfPayments(3);
+
+            //Act
+            RabbitMQManager.SendString(twoRecords);
+
+            //Assert
+            List<PurchaseDataOutput> outputPurchases = DalAccess.PullAllPurchasesData();
+            outputPurchases.Count.Should().Be(1);
+        }
+
     }
 }

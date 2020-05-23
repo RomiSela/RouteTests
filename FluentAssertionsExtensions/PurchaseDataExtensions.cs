@@ -9,56 +9,62 @@ namespace FluentAssertionsExtensions
 {
     public static class PurchaseDataExtensions
     {
-        private static void ValidFieldsRecord(this PurchaseData p)
+        private static void ValidFieldsRecord(this PurchaseData purchaseData)
         {
-            p.StoreId = $"AA{GenerateFields.GenerateA5DigitsNumber()}";
-            p.CreditCardNumber = "4557446145890236";
-            p.PurchaseDate = "2019-09-03";
-            p.PurchasePrice = "100.0";
+            purchaseData.StoreId = $"AA{GenerateFields.GenerateA5DigitsNumber()}";
+            purchaseData.CreditCardNumber = "4557446145890236";
+            purchaseData.PurchaseDate = "2019-09-03";
+            purchaseData.PurchasePrice = "100.0";
         }
 
-        public static void CreateValidRecord(this PurchaseData p)
+        public static void CreateValidRecord(this PurchaseData purchaseData)
         {
-            ValidFieldsRecord(p);
+            ValidFieldsRecord(purchaseData);
         }
 
-        public static void CreateInvalidCredirCardRecord(this PurchaseData p)
+        public static void CreateValidRecordPriceOver5000(this PurchaseData purchaseData)
         {
-            ValidFieldsRecord(p);
-            p.CreditCardNumber = "455744645890236";
+            ValidFieldsRecord(purchaseData);
+            purchaseData.PurchasePrice = "12000";
         }
 
-        public static void CreateRecordWithDateWhenClose(this PurchaseData p)
+        public static void CreateInvalidCredirCardRecord(this PurchaseData purchaseData)
         {
-            ValidFieldsRecord(p);
-            p.StoreId = $"AC{GenerateFields.GenerateA5DigitsNumber()}";
-            p.PurchaseDate = "2020-04-18";
+            ValidFieldsRecord(purchaseData);
+            purchaseData.CreditCardNumber = "455744645890236";
         }
 
-        public static void CreateRecordWithDateNotInFormat(this PurchaseData p, string whichCase)
+        public static void CreateRecordWithDateWhenClose(this PurchaseData purchaseData)
         {
-            ValidFieldsRecord(p);
+            ValidFieldsRecord(purchaseData);
+            purchaseData.StoreId = $"AC{GenerateFields.GenerateA5DigitsNumber()}";
+            purchaseData.PurchaseDate = "2020-04-18";
+        }
 
-            if (whichCase == "notExist")
+        public static void CreateRecordWithDateNotInFormat(this PurchaseData purchaseData, string testCase)
+        {
+            ValidFieldsRecord(purchaseData);
+
+            if (testCase == "notExist")
             {
-                p.PurchaseDate = "2020-04-32";
+                purchaseData.PurchaseDate = "2020-04-32";
             }
-            else if(whichCase == "randomNumber")
+            else if(testCase == "randomNumber")
             {
-                p.PurchaseDate = "4355";
+                purchaseData.PurchaseDate = "4355";
             }
-            else if(whichCase== "notInOrder")
+            else if(testCase== "notInOrder")
             {
-                p.PurchaseDate = "18-04-2020";
+                purchaseData.PurchaseDate = "18-04-2020";
             }
         }
 
-        public static void CreateRecordWithDateLaterThanNow(this PurchaseData p)
+        public static void CreateRecordWithDateLaterThanNow(this PurchaseData purchaseData)
         {
-            ValidFieldsRecord(p);
+            ValidFieldsRecord(purchaseData);
             DateTime d = DateTime.Now;
             d.AddDays(1);
-            p.PurchaseDate = $"{d.Year}-{d.Month}-{d.Day}";
+            purchaseData.PurchaseDate = $"{d.Year}-{d.Month}-{d.Day}";
         }
 
         public static void CreateRecordWithInvalidNumberOfPayments(this PurchaseData p)
@@ -67,39 +73,56 @@ namespace FluentAssertionsExtensions
             p.NumberOfPayments = "15000";
         }
 
-        public static void CreateRecordWithInvalidStoreId(this PurchaseData p, int number)
+        public static void CreateRecordWithInvalidStoreId(this PurchaseData purchaseData, int testCase)
         {
-            ValidFieldsRecord(p);
-            if (number == 1)
+            ValidFieldsRecord(purchaseData);
+            if (testCase == 1)
             {
-                p.StoreId = $"TA{GenerateFields.GenerateA5DigitsNumber()}";
+                purchaseData.StoreId = $"TA{GenerateFields.GenerateA5DigitsNumber()}";
             }
-            else if(number==2)
+            else if(testCase==2)
             {
-                p.StoreId = $"AL{GenerateFields.GenerateA5DigitsNumber()}";
+                purchaseData.StoreId = $"AL{GenerateFields.GenerateA5DigitsNumber()}";
             }
-            else if(number ==3)
+            else if(testCase ==3)
             {
-                p.StoreId = $"aA{GenerateFields.GenerateA5DigitsNumber()}";
+                purchaseData.StoreId = $"aA{GenerateFields.GenerateA5DigitsNumber()}";
             }
-            else if (number == 4)
+            else if (testCase == 4)
             {
-                p.StoreId = $"Aa{GenerateFields.GenerateA5DigitsNumber()}";
+                purchaseData.StoreId = $"Aa{GenerateFields.GenerateA5DigitsNumber()}";
             }
-            else if (number == 5)
+            else if (testCase == 5)
             {
-                p.StoreId = $"3A{GenerateFields.GenerateA5DigitsNumber()}";
+                purchaseData.StoreId = $"3A{GenerateFields.GenerateA5DigitsNumber()}";
             }
-            else if (number == 6)
+            else if (testCase == 6)
             {
-                p.StoreId = $"A3{GenerateFields.GenerateA5DigitsNumber()}";
+                purchaseData.StoreId = $"A3{GenerateFields.GenerateA5DigitsNumber()}";
             }
         }
 
-        public static void CreateRecordWithInvalidNumberOfPayment(this PurchaseData p)
+        public static void CreateRecordWithImpossiblePrice(this PurchaseData purchaseData)
         {
-            ValidFieldsRecord(p);
-            p.PurchasePrice = "@";
+            ValidFieldsRecord(purchaseData);
+            purchaseData.PurchasePrice = "@";
+        }
+
+        public static void CreateRecordWithImpossibleNumberOfPayments(this PurchaseData purchaseData, int testCase)
+        {
+            ValidFieldsRecord(purchaseData);
+            if(testCase == 1)
+            {
+                purchaseData.NumberOfPayments = "full";
+            }
+            else if(testCase == 2)
+            {
+                purchaseData.NumberOfPayments = "-2";
+            }
+            else if(testCase == 3)
+            {
+                purchaseData.NumberOfPayments = "&";
+            }
         }
     }
 }
